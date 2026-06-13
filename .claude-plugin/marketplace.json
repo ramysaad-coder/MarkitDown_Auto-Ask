@@ -1,0 +1,14 @@
+{
+  "name": "markitdown-gateway",
+  "owner": {
+    "name": "Ramy Saad",
+    "email": "ramy.saad@nis-egypt.com"
+  },
+  "plugins": [
+    {
+      "name": "markitdown-gateway",
+      "source": "./",
+      "description": "Convert-or-read-as-is gateway for markitdown-supported files, with the markitdown MCP server bundled."
+    }
+  ]
+}

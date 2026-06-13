@@ -1,0 +1,18 @@
+{
+  "name": "markitdown-gateway",
+  "version": "1.0.0",
+  "description": "Intercepts Read on markitdown-supported files (PDF, Office docs, images, audio, HTML, CSV, etc.) and lets you choose: convert to Markdown via the bundled markitdown MCP server, or read the file as-is. Ships the MCP server, the PreToolUse hook, and a /markitdown-gateway:setup command that auto-detects the OS and installs all prerequisites (Python + markitdown-mcp) with no manual config.",
+  "author": {
+    "name": "Ramy Saad",
+    "email": "ramy.saad@nis-egypt.com"
+  },
+  "keywords": [
+    "markitdown",
+    "markdown",
+    "mcp",
+    "hook",
+    "document-conversion",
+    "pdf",
+    "office"
+  ]
+}

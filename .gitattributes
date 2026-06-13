@@ -1,0 +1,9 @@
+# Keep LF on files that must run on macOS/Linux — CRLF breaks bash + shebangs.
+*.sh   text eol=lf
+*.py   text eol=lf
+
+# PowerShell is fine with CRLF on Windows.
+*.ps1  text eol=crlf
+
+# Let git normalize everything else.
+*      text=auto

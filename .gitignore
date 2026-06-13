@@ -1,0 +1,6 @@
+# Runtime one-shot bypass marker written by the hook
+hooks/.markitdown-bypass
+
+# Python noise
+__pycache__/
+*.pyc

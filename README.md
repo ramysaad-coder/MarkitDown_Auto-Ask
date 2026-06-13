@@ -3,6 +3,24 @@
 A Claude Code plugin that turns every document you open into a deliberate choice:
 **convert it to clean Markdown, or read it as-is.**
 
+## 🚀 Quick start
+
+In **Claude Code**, paste these **one at a time**, approve the installs when
+asked, then **restart Claude Code**:
+
+```text
+/plugin marketplace add ramysaad-coder/MarkitDown_Auto-Ask
+/plugin install markitdown-gateway@markitdown-gateway
+/reload-plugins
+/markitdown-gateway:setup
+```
+
+That's the whole install — the setup step auto-installs everything it needs
+(Python included) and works on **Windows, macOS, and Linux**. New to this or want
+the hand-held version? Read the **[full step-by-step install guide →](INSTALL.md)**
+
+---
+
 Whenever Claude is about to `Read` a file that the
 [markitdown](https://github.com/microsoft/markitdown) engine can convert — PDF,
 Word, PowerPoint, Excel, images, audio, HTML, CSV, and more — the plugin pauses

@@ -6,7 +6,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python \"${CLAUDE_PLUGIN_ROOT}/hooks/markitdown-ask.py\" || python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/markitdown-ask.py\"",
+            "command": "python",
+            "args": ["${CLAUDE_PLUGIN_ROOT}/hooks/markitdown-ask.py"],
             "timeout": 15,
             "statusMessage": "Checking if file should be converted to Markdown..."
           }

@@ -38,9 +38,8 @@ everything:
 
 - **Windows:** install Python from [python.org](https://www.python.org/downloads/)
   with **"Add python.exe to PATH"** checked. That puts both `python` and the
-  `Scripts\` directory (where `markitdown-mcp.exe` lands) on `PATH`. Having
-  **Git for Windows** (Git Bash) installed is recommended — Claude Code runs
-  hook commands through it. See *Pure-PowerShell Windows* below if you don't.
+  `Scripts\` directory (where `markitdown-mcp.exe` lands) on `PATH`. **Git Bash is
+  not required** — the hook launches Python directly, no shell involved.
 - **macOS / Linux:** install Python 3 via python.org, Homebrew (`brew install
   python`), or your package manager — this gives you `python3`. Make sure pip's
   bin directory is on `PATH` so the `markitdown-mcp` launcher is found (true for
@@ -53,9 +52,11 @@ everything:
 
 - The **MCP server** launches via the `markitdown-mcp` console script (pip
   creates it with the same name on every OS and bakes in the right interpreter).
-- The **hook** runs `python … || python3 …`, so it uses `python` on Windows and
-  falls back to `python3` on macOS/Linux. No hard-coded paths anywhere — the
-  bundled script is located via Claude Code's `${CLAUDE_PLUGIN_ROOT}`.
+- The **hook** is a **direct, no-shell call** to `python` (exec form), so it runs
+  the same on every OS and needs **no Git Bash / no PowerShell**. `python` is
+  reliable on Windows; on macOS/Linux (where bare `python` is often missing) the
+  `/setup` step creates a `python` → `python3` shim so the call resolves. No
+  hard-coded paths — the bundled script is located via `${CLAUDE_PLUGIN_ROOT}`.
 
 ## Install
 
@@ -129,19 +130,18 @@ The `markitdown-mcp` launcher isn't on `PATH`. Confirm `markitdown-mcp --help`
 runs in a fresh terminal. On Windows, reinstall Python with "Add to PATH"; on
 macOS/Linux, add pip's bin directory to `PATH` (see Prerequisites).
 
-**The convert/read prompt never appears on Windows.**
-Claude Code ran the hook under PowerShell instead of Git Bash, and Windows
-PowerShell 5.1 doesn't support the `||` fallback used in the hook command. Two
-fixes: (a) install **Git for Windows** so hooks run through Git Bash
-(recommended), or (b) edit `hooks/hooks.json` and replace the `command` value
-with a single launcher your machine has, e.g.:
+**The convert/read prompt never appears.**
+The hook calls `python` directly (no shell — so Git Bash/PowerShell version
+doesn't matter). Make sure a **`python`** command works in a fresh terminal:
 
-```json
-"command": "python \"${CLAUDE_PLUGIN_ROOT}/hooks/markitdown-ask.py\""
-```
+- **Windows:** `python --version` should print 3.10+. If not, reinstall Python
+  from python.org with **"Add to PATH"** checked.
+- **macOS/Linux:** `/setup` creates a `python` → `python3` shim automatically. If
+  you set things up manually and only have `python3`, create the shim yourself:
+  `ln -sf "$(command -v python3)" ~/.local/bin/python` (and ensure `~/.local/bin`
+  is on `PATH`).
 
-(Windows always has `python` after a python.org install, so the `|| python3`
-fallback is only needed on macOS/Linux.)
+Then restart Claude Code.
 
 ## Uninstall
 

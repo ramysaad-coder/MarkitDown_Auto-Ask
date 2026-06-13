@@ -65,5 +65,31 @@ else
   echo "[warn] markitdown-mcp not on PATH. Add your Python/pipx bin dir to PATH (often ~/.local/bin), then restart your shell."
 fi
 
+# The plugin's hook launches the interpreter as `python` (no shell, so it works
+# on Windows without Git Bash). macOS/Linux often only have `python3`, so make
+# sure a `python` command exists, co-located with markitdown-mcp where possible
+# (same PATH visibility for Claude Code).
+if ! command -v python >/dev/null 2>&1; then
+  PY3="$(command -v python3 || true)"
+  if [ -n "$PY3" ]; then
+    BIN="$HOME/.local/bin"
+    MM="$(command -v markitdown-mcp 2>/dev/null || true)"
+    if [ -n "$MM" ]; then
+      d="$(dirname "$MM")"
+      [ -w "$d" ] && BIN="$d"
+    fi
+    mkdir -p "$BIN"
+    if ln -sf "$PY3" "$BIN/python" 2>/dev/null; then
+      echo "[OK] created a 'python' command -> $PY3 in $BIN (needed by the hook)"
+      case ":$PATH:" in
+        *":$BIN:"*) : ;;
+        *) echo "[note] add $BIN to your PATH so 'python' is found, then restart your shell." ;;
+      esac
+    else
+      echo "[warn] could not create a 'python' shim in $BIN. The hook needs a 'python' command; create one pointing to python3 (e.g. 'ln -sf \"$PY3\" ~/.local/bin/python')."
+    fi
+  fi
+fi
+
 echo ""
 echo "[done] Prerequisites ready. Restart Claude Code, then check /mcp and /hooks."

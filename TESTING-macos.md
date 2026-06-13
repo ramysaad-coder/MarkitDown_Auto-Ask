@@ -56,15 +56,18 @@ printf '%s\n' \
 **Pass if** the output includes a `convert_to_markdown` tool in the `tools/list`
 result.
 
-## Test C — the hook script + the `python3` fallback (the key Mac risk)
+## Test C — the hook runs via a plain `python` call (the key Mac risk)
 
-On macOS bare `python` is usually absent, so the hook must fall back to
-`python3`. Simulate the exact command Claude Code runs:
+The hook launches the interpreter directly as **`python`** (no shell). On macOS
+bare `python` is often absent, so `/setup` creates a `python` → `python3` shim.
+First confirm `python` resolves, then run the exact call Claude Code makes:
 
 ```bash
+command -v python    # must print a path; if not, re-run Test A (the setup creates the shim)
+
 ROOT="$(pwd)"
 echo '{"tool_name":"Read","tool_input":{"file_path":"/tmp/report.pdf"}}' \
- | sh -c "python \"$ROOT/hooks/markitdown-ask.py\" || python3 \"$ROOT/hooks/markitdown-ask.py\""
+ | python "$ROOT/hooks/markitdown-ask.py"
 ```
 
 **Pass if** you get ONE JSON object with `"permissionDecision":"deny"` and a
@@ -74,7 +77,7 @@ Now confirm a non-supported file stays silent:
 
 ```bash
 echo '{"tool_name":"Read","tool_input":{"file_path":"/tmp/app.py"}}' \
- | sh -c "python \"$ROOT/hooks/markitdown-ask.py\" || python3 \"$ROOT/hooks/markitdown-ask.py\""
+ | python "$ROOT/hooks/markitdown-ask.py"
 ```
 
 **Pass if** there is **no output**.

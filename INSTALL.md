@@ -12,6 +12,8 @@ things quietly in the background).
 > - **Plugin** — a small add-on that gives Claude Code a new ability.
 > - **Markdown** — just a plain, tidy text format. "Convert to Markdown" means
 >   "turn this document into clean, readable text."
+> - **markitdown-gateway** — the technical name of this plugin. You'll see it in
+>   the commands and lists below. It's the same thing as "MarkitDown Auto-Ask."
 
 ---
 
@@ -57,12 +59,8 @@ You need just **two things**:
 | An **internet connection** | Needed for the one-time downloads. |
 
 > **You do _not_ need to install Python yourself** — the setup step does that for
-> you if it's missing.
->
-> **Windows tip:** the prompt feature works most reliably if **Git for Windows**
-> (a common, free tool) is installed. Most work laptops already have it. If the
-> Convert/Read question doesn't appear later, the [Troubleshooting](#if-something-goes-wrong)
-> section explains the one-time fix.
+> you if it's missing. You also don't need any other tools (no "Git Bash" or
+> similar); the setup handles everything.
 
 This plugin works on **Windows**, **macOS**, and **Linux**.
 
@@ -149,9 +147,13 @@ doesn't already have it), and gets everything ready.
 /markitdown-gateway:setup
 ```
 
-> **If Claude says it doesn't recognize this command:** fully close and reopen
-> Claude Code (see [Step 5](#step-5--restart-claude-code) for how), then paste
-> this command again.
+> The `:` (colon) in this command is correct — it's how Claude Code runs a
+> plugin's built-in action. Just copy-paste it as shown.
+
+> **This is common and not a problem:** if Claude replies that it doesn't
+> recognize the command, the plugin just needs a restart first. Fully close and
+> reopen Claude Code (see [Step 5](#step-5--restart-claude-code)), then paste the
+> command again — it'll work the second time.
 
 **What happens now:**
 
@@ -175,15 +177,17 @@ When it finishes, Claude tells you the prerequisites are ready.
 
 ## Step 5 — Restart Claude Code
 
-A fresh start lets the converter connect. **How to restart depends on how you use
-Claude Code:**
+Yes, another switch-on step — but a different one: `/reload-plugins` in Step 3
+turned the plugin **on**, and this restart lets the **converter connect** now
+that the setup has installed it. **How to restart depends on how you use Claude
+Code:**
 
 - **Not sure which you use?** If you click an app icon to open Claude, you're on
   the **desktop app** — use that row below.
 
 | If you use… | How to fully restart |
 | --- | --- |
-| **The desktop app (Windows)** | Close the window. Then check the **system tray** — the little row of icons near the clock at the bottom-right of your screen (you may need to click the small upward arrow `^` to reveal hidden ones). If a Claude icon is there, right-click it and choose **Quit**. Then open Claude again. |
+| **The desktop app (Windows)** | Close the window. Then check the **system tray** — the little row of icons near the clock at the bottom-right of your screen (you may need to click the small upward arrow `^` to reveal hidden ones). If a Claude icon is there, right-click it and choose **Quit**. **If you don't see a Claude icon there, it's already fully closed** — just open it again. |
 | **The desktop app (Mac)** | Press **Cmd + Q** to quit fully — just closing the window isn't enough. Then reopen it. |
 | **A terminal / command window** | Type `exit`, press Enter, then start it again by typing `claude`. |
 | **Inside VS Code or another code editor** | Reload or restart the editor. |
@@ -222,13 +226,15 @@ If both appear, you're fully installed. If not, see
 Let's see it work.
 
 1. Pick any document — a **PDF**, **Word doc**, **Excel sheet**, or **CSV** — and
-   ask Claude to read it. The easiest ways to point Claude at a file:
-   - **Just name it in plain language**, e.g.
-     *"Please read my Downloads folder's report.pdf"*, or
-   - **Drag the file** from your folder into the chat box, if your Claude Code
-     supports it, or
-   - **Get its exact location**: right-click the file → **Properties** (Windows)
-     or **Get Info** (Mac), and copy the folder path.
+   ask Claude to read it. Easiest ways to point Claude at a file:
+   - **Easiest — just describe it in plain words**, e.g.
+     *"Please read report.pdf in my Downloads folder."* Claude will find it.
+   - **Or drag the file** from your folder straight into the chat box, if your
+     Claude Code supports it.
+   - **Or give the full location** (advanced): right-click the file →
+     **Properties** (Windows) or **Get Info** (Mac). Note that this shows the
+     **folder** — you still need to add the **file's name** on the end, so the
+     whole thing reads like `C:\Users\You\Downloads\report.pdf`.
 
 2. Instead of just opening it, Claude **pauses and asks you**:
    **Convert to Markdown** or **Read as-is**. Click your choice.
@@ -262,16 +268,16 @@ From now on, this happens automatically for supported files.
 | What you see | What it means | How to fix it |
 | --- | --- | --- |
 | `/markitdown-gateway:setup` is "not recognized" | The plugin isn't switched on in this session yet | Run `/reload-plugins` (Step 3). If it still isn't recognized, fully restart Claude Code (Step 5), then try again. |
-| `/mcp` doesn't list **markitdown**, or shows **failed** | The converter engine isn't found yet | Make sure you finished **Step 4** and **restarted** (Step 5). If it still fails, see the PATH fixes below. |
-| The **Convert / Read-as-is** question never appears | The plugin's feature didn't load | Restart Claude Code (Step 5). **On Windows**, also install **Git for Windows** (free, from [git-scm.com](https://git-scm.com/download/win)) — the feature uses it — then restart again. |
+| `/mcp` doesn't list **markitdown**, or shows **failed** | The converter engine isn't installed or can't be found yet | Make sure you finished **Step 4** and **restarted** (Step 5). If it still fails, see the PATH fixes below. |
+| The **Convert / Read-as-is** question never appears | The plugin's feature didn't load | Restart Claude Code (Step 5). If it still doesn't appear, re-run `/markitdown-gateway:setup` and approve the installs, then restart again. |
 | Setup says **"winget not available"** (Windows) | Windows can't auto-install Python | Install Python from [python.org](https://www.python.org/downloads/), and on the **first installer screen check "Add python.exe to PATH"**. Then run `/markitdown-gateway:setup` again. |
 | `markitdown-mcp ... not on PATH` — **Windows** | Python's program folder isn't findable | This almost always means Python was installed **without** "Add to PATH". Reinstall Python from [python.org](https://www.python.org/downloads/) with **"Add python.exe to PATH" checked**, then run setup again. |
 | `markitdown-mcp ... not on PATH` — **Mac/Linux** | The install folder isn't findable yet | Close and reopen your terminal/app. The setup message names the folder to add (often `~/.local/bin`); a technical colleague can add it to your `PATH`. |
 | Setup asks for your **password** (Mac) | Mac is installing Homebrew/Python | Normal — type your Mac login password to continue. |
 | It seems frozen during setup | It's downloading large files | Give it several minutes. Only worry if there's **no** activity for ~10+ minutes (then check for a missed Approve prompt). |
 
-Still stuck? Copy any **red error text** and send it to whoever shared this plugin
-with you — it usually points right at the fix.
+Still stuck? Copy any **error message** (often shown in red) and send it to
+whoever shared this plugin with you — it usually points right at the fix.
 
 ---
 
@@ -300,7 +306,8 @@ Then run `/reload-plugins` (or restart Claude Code).
   Then run `/reload-plugins` (or restart).
 
 The markitdown converter stays installed on your computer (it's harmless). A
-technical user can fully remove it with `pip uninstall markitdown-mcp`.
+technical user can fully remove it with `python -m pip uninstall markitdown-mcp`
+(`python3 -m pip` on Mac/Linux).
 
 ---
 
